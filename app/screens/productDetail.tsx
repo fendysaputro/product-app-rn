@@ -1,5 +1,5 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { Alert, Button, Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { RootStackParamList } from "../types/navigation";
 
 type DetailRoute = RouteProp<RootStackParamList, "ProductDetail">;
@@ -25,9 +25,11 @@ export default function ProductDetail() {
                 </Button>
             </View>
             <Separator />
-            <Text style={styles.price}>
+            <ScrollView>
+                <Text style={styles.price}>
                 {product.description}
             </Text>
+            </ScrollView>
         </View>
     );
 }
