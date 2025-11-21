@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import CustomProfileCard from '../util/customProfileCard';
 
 export default function settingsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Settings Screen</Text>
+      <CustomProfileCard title="Fendy Saputro" description="Mobile Engieer" />
     </View>
   );
 }
@@ -12,11 +13,11 @@ export default function settingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
   },
   text: {
     fontSize: 22,
     fontWeight: '600',
+    textAlign: 'center'
   },
 });
