@@ -1,19 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import CustomProfileCard from '../util/customProfileCard';
 import RowView from '../util/rowView';
 
 export default function settingsScreen() {
   const Separator = () => <View style={styles.separator} />;
 
-
   return (
     <View style={styles.container}>
-      <CustomProfileCard title="Fendy Saputro" description="Mobile Engieer" />
-      <Text style={styles.text}>Other Setting</Text>
-      <RowView iconItem='person-outline' name="Profile details" iconArrow="arrow-forward"></RowView>
-      <RowView iconItem='logo-ionic' name='Password' iconArrow='arrow-forward'></RowView>
-      <RowView iconItem='notifications' name='Notification' iconArrow='arrow-forward'></RowView>
+      <ScrollView>
+        <CustomProfileCard title="Fendy Saputro" description="Mobile Engieer" />
+        <Text style={styles.text}>Other Setting</Text>
+        <RowView iconItem='person' name="Profile details" iconArrow="arrow-forward-ios"></RowView>
+        <RowView iconItem='password' name='Password' iconArrow='arrow-forward-ios'></RowView>
+        <RowView iconItem='circle-notifications' name='Notification' iconArrow='arrow-forward-ios'></RowView>
+      </ScrollView>
     </View>
   );
 }

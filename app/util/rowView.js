@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MyRowView = ({ iconItem, name, iconArrow }) => {
     return (
@@ -7,13 +7,13 @@ const MyRowView = ({ iconItem, name, iconArrow }) => {
             {/* Left items */}
             <View style={styles.leftItems}>
                 {/* {iconItem && <Icon name={iconItem} size={30} color="#900" />} */}
-                <Icon name={iconItem} size={30} color="#900"></Icon>
+                <MaterialCommunityIcons name={iconItem} size={30} color="#900"></MaterialCommunityIcons>
                 <Text style={styles.item}>{name}</Text>
             </View>
 
             {/* Right item */}
             <View style={styles.rightItem}>
-                <Icon name={iconArrow} size={30} color="#900"></Icon>
+                <MaterialCommunityIcons name={iconArrow} size={30} color="#900"></MaterialCommunityIcons>
             </View>
         </View>
     );
