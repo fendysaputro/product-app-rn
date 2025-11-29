@@ -6,12 +6,14 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import Swiper from 'react-native-swiper';
 import { Product } from '../model/Product';
 import { RootStackParamList } from '../types/navigation';
+import CardCategory from '../util/cardCategory';
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, "ProductDetail">;
 
 export default function homeScreen() {
     const [data, setData] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     const fetchProducts = async () => {
         try {
@@ -42,6 +44,34 @@ export default function homeScreen() {
         navigation.navigate("ProductDetail", { product: item });
     };
 
+    const handleSelectCategory = (category: string) => {
+        setSelectedCategory(category);
+    }
+
+    const FlatListCards = () => {
+        const uniqueCategories = Array.from(
+            new Set(data.map(item => item.category))
+        ).map(category => ({ category }));
+        return (
+            <FlatList
+                data={uniqueCategories}
+                renderItem={({ item }) => (
+                    <CardCategory
+                        category={item.category}
+                        onPress={() => handleSelectCategory(item.category)}
+                    />
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+            />
+        );
+    };
+
+    const filteredData = selectedCategory
+        ? data.filter(item => item.category === selectedCategory)
+        : data;
+
     return (
         <View style={{ flex: 1 }}>
             <View style={{ height: '50%' }}>
@@ -52,8 +82,12 @@ export default function homeScreen() {
                 </Swiper>
             </View>
 
+            <View style={styles.rowContainer}>
+                <FlatListCards></FlatListCards>
+            </View>
+
             <FlatList
-                data={data}
+                data={filteredData}
                 numColumns={2}
                 keyExtractor={(item) => item.id.toString()}
                 columnWrapperStyle={{ justifyContent: 'space-between' }}
@@ -110,5 +144,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    rowContainer: {
+        flexDirection: 'row', // Arranges children horizontally
+        justifyContent: 'space-around', // Distributes space evenly
+        alignItems: 'center', // Aligns items vertically in the center
+        padding: 10,
+    },
+    cardRow: {
+        backgroundColor: '#f0f0f0',
+        borderRadius: 8,
+        padding: 15,
+        margin: 5,
+        width: 100, // Example fixed width for demonstration
+        // Or use flex: 1 for dynamic width distribution
+    },
+    cardTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
 });
