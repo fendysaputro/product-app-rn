@@ -1,5 +1,15 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { Alert, Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+    Gesture,
+    GestureDetector,
+    GestureHandlerRootView,
+} from "react-native-gesture-handler";
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
 import { RootStackParamList } from "../types/navigation";
 
 type DetailRoute = RouteProp<RootStackParamList, "ProductDetail">;
@@ -9,10 +19,36 @@ export default function ProductDetail() {
     const { product } = route.params;
     const Separator = () => <View style={styles.separator} />;
 
+    const scale = useSharedValue(1);
+
+    // Gesture pinch
+    const pinch = Gesture.Pinch()
+        .onUpdate((e) => {
+            scale.value = e.scale; // zoom mengikuti gerakan
+        })
+        .onEnd(() => {
+            // kembali normal jika lepaskan (opsional)
+            scale.value = withTiming(1, { duration: 200 });
+        });
+
+    // Animated style
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: scale.value }],
+    }));
+
     return (
         <View style={{ flex: 1 }}>
             <View style={{ height: '60%' }}>
-                <Image source={{ uri: product.image }} style={styles.image} />
+                {/* <Image source={{ uri: product.image }} style={styles.image} /> */}
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                    <GestureDetector gesture={pinch}>
+                        <Animated.Image
+                            source={{ uri: product.image }}
+                            style={[styles.image, animatedStyle]}
+                            resizeMode="contain"
+                        />
+                    </GestureDetector>
+                </GestureHandlerRootView>
             </View>
             <Text numberOfLines={1} style={styles.text}>{product.title}</Text>
             <Text style={styles.price}>$${product.price}</Text>
@@ -27,8 +63,8 @@ export default function ProductDetail() {
             <Separator />
             <ScrollView>
                 <Text style={styles.price}>
-                {product.description}
-            </Text>
+                    {product.description}
+                </Text>
             </ScrollView>
         </View>
     );
