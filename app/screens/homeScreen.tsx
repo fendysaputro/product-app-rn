@@ -10,10 +10,12 @@ import CardCategory from '../util/cardCategory';
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, "ProductDetail">;
 
-export default function homeScreen() {
+export default function HomeScreen() {
     const [data, setData] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    // const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
 
     const fetchProducts = async () => {
         try {
@@ -44,32 +46,49 @@ export default function homeScreen() {
         navigation.navigate("ProductDetail", { product: item });
     };
 
+    // const handleSelectCategory = (category: string) => {
+    //     setSelectedCategory(category);
+    //     console.log('category', category);
+    // };
+
     const handleSelectCategory = (category: string) => {
-        setSelectedCategory(category);
-    }
+        setSelectedCategories(prev => {
+            if (prev.includes(category)) {
+                // unselect
+                return prev.filter(item => item !== category);
+            } else {
+                // select
+                return [...prev, category];
+            }
+        });
+    };
+
 
     const FlatListCards = () => {
         const uniqueCategories = Array.from(
             new Set(data.map(item => item.category))
         ).map(category => ({ category }));
+
         return (
             <FlatList
                 data={uniqueCategories}
                 renderItem={({ item }) => (
                     <CardCategory
                         category={item.category}
+                        isSelected={selectedCategories.includes(item.category)}
                         onPress={() => handleSelectCategory(item.category)}
                     />
                 )}
                 keyExtractor={(item, index) => index.toString()}
-                horizontal={true}
+                horizontal
                 showsHorizontalScrollIndicator={false}
             />
         );
     };
 
-    const filteredData = selectedCategory
-        ? data.filter(item => item.category === selectedCategory)
+
+    const filteredData = selectedCategories.length
+        ? data.filter(item => selectedCategories.includes(item.category))
         : data;
 
     return (

@@ -1,12 +1,22 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-const CardCategory = ({ category, onPress }) => {
+const CardCategory = ({ category, isSelected, onPress }) => {
     return (
-        <TouchableOpacity onPress={onPress}>
-            <View style={styles.cardRow}>
-                <Text style={styles.cardTitle}>{category}</Text>
-            </View>
+        // <View style={styles.cardRow}>
+        <TouchableOpacity
+            onPress={onPress}
+            style={{
+                borderRadius: 8,
+                padding: 8,
+                margin: 5,
+                backgroundColor: isSelected ? '#ff6961' : '#fff'
+            }}
+        >
+            <Text style={{ color: isSelected ? 'white' : 'black' }}>
+                {category}
+            </Text>
         </TouchableOpacity>
+        // </View>
     );
 };
 
